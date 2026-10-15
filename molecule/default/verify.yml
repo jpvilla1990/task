@@ -1,0 +1,13 @@
+- name: Verify common role
+  hosts: all
+  become: true
+  tasks:
+    - name: Read SSH configuration
+      ansible.builtin.command: grep '^PermitRootLogin no$' /etc/ssh/sshd_config
+      changed_when: false
+      register: ssh_root_login
+
+    - name: Assert root SSH login is disabled
+      ansible.builtin.assert:
+        that:
+          - ssh_root_login.rc == 0

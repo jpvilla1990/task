@@ -1,0 +1,64 @@
+# Set firewall defaults
+- name: Default policy - deny incoming
+  community.general.ufw:
+    direction: incoming
+    default: deny
+
+- name: Default policy - allow outgoing
+  community.general.ufw:
+    direction: outgoing
+    default: allow
+
+# Allow SSH only from authorized IPs
+- name: Allow SSH
+  community.general.ufw:
+    rule: allow
+    port: "22"
+    proto: tcp
+    from_ip: "{{ item }}"
+    comment: ssh
+  loop: "{{ common_ssh_allowed_cidrs }}"
+
+# Allow Prometheus node_exporter scrapes from monitoring IPs
+- name: Allow Prometheus scrapes of node_exporter
+  community.general.ufw:
+    rule: allow
+    port: "{{ common_node_exporter_port | string }}"
+    proto: tcp
+    from_ip: "{{ item }}"
+    comment: node_exporter
+  loop: "{{ common_monitoring_cidrs }}"
+
+# Allow explicitly configured extra rules
+- name: Allow extra rules
+  community.general.ufw:
+    rule: allow
+    port: "{{ item.port | string }}"
+    proto: "{{ item.proto | default('tcp') }}"
+    from_ip: "{{ item.from | default('any') }}"
+    comment: "{{ item.comment | default(omit) }}"
+  loop: "{{ common_firewall_extra_rules }}"
+
+# Enable UFW integration with Docker's forwarding chain
+- name: Make Docker respect the firewall
+  ansible.builtin.blockinfile:
+    path: /etc/ufw/after.rules
+    marker: "# {mark} ANSIBLE: UFW AND DOCKER"
+    block: |
+      *filter
+      :ufw-user-forward - [0:0]
+      :DOCKER-USER - [0:0]
+      -A DOCKER-USER -j ufw-user-forward
+      -A DOCKER-USER -m conntrack --ctstate RELATED,ESTABLISHED -j RETURN
+      -A DOCKER-USER -i docker0 -j RETURN
+      -A DOCKER-USER -i br-+ -j RETURN
+      -A DOCKER-USER -j DROP
+      COMMIT
+  when: common_firewall_docker_user_chain
+  notify: Reload ufw
+
+# Enable firewall only after allowing required traffic
+- name: Enable firewall
+  community.general.ufw:
+    state: enabled
+    logging: "low"

@@ -1,0 +1,23 @@
+- name: admin users
+  ansible.builtin.import_tasks: admin.yaml
+  tags: [admin]
+
+- name: Docker
+  ansible.builtin.import_tasks: docker.yaml
+  tags: [docker]
+
+- name: auditd
+  ansible.builtin.import_tasks: auditd.yaml
+  tags: [auditd]
+
+- name: firewall
+  ansible.builtin.import_tasks: firewall.yaml
+  tags: [firewall]
+
+- name: updates
+  ansible.builtin.import_tasks: updates.yaml
+  tags: [updates]
+
+- name: monitoring
+  ansible.builtin.import_tasks: monitoring.yaml
+  tags: [monitoring]

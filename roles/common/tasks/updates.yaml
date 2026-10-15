@@ -1,0 +1,27 @@
+- name: Enable periodic security updates
+  ansible.builtin.copy:
+    content: |
+      APT::Periodic::Update-Package-Lists "1";
+      APT::Periodic::Unattended-Upgrade "1";
+      APT::Periodic::AutocleanInterval "7";
+    dest: /etc/apt/apt.conf.d/20auto-upgrades
+    owner: root
+    group: root
+    mode: "0644"
+
+# Stock 50unattended-upgrades already limits origins to -security (+ESM). Docker's repo is not
+# in Allowed-Origins on purpose: engine upgrades restart containers, so they are scheduled by us.
+- name: Unattended-upgrades policy drop-in
+  ansible.builtin.template:
+    src: unattended-upgrades.j2
+    dest: /etc/apt/apt.conf.d/52unattended-upgrades-hardening
+    owner: root
+    group: root
+    mode: "0644"
+
+- name: Ensure the upgrade timers are active
+  ansible.builtin.systemd:
+    name: "{{ item }}"
+    enabled: true
+    state: started
+  loop: [apt-daily.timer, apt-daily-upgrade.timer]

@@ -1,0 +1,13 @@
+// {{ ansible_managed }}
+Unattended-Upgrade::Remove-Unused-Kernel-Packages "true";
+Unattended-Upgrade::Remove-Unused-Dependencies "true";
+Unattended-Upgrade::Automatic-Reboot "{{ 'true' if common_auto_reboot else 'false' }}";
+{% if common_auto_reboot %}
+Unattended-Upgrade::Automatic-Reboot-Time "{{ common_auto_reboot_time }}";
+Unattended-Upgrade::Package-Blacklist {
+    "docker.io";
+    "docker-ce";
+    "docker-ce-cli";
+    "containerd.io";
+};
+{% endif %}

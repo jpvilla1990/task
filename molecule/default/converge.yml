@@ -1,0 +1,5 @@
+- name: Apply common role
+  hosts: all
+  become: false
+  roles:
+    - common

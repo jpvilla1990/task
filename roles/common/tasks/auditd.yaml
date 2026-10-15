@@ -1,0 +1,30 @@
+---
+- name: Tune auditd.conf
+  ansible.builtin.lineinfile:
+    path: /etc/audit/auditd.conf
+    regexp: "^\\s*{{ item.key }}\\s*="
+    line: "{{ item.key }} = {{ item.value }}"
+  loop:
+    - { key: max_log_file, value: "{{ common_auditd_max_log_file }}" }
+    - { key: num_logs, value: "{{ common_auditd_num_logs }}" }
+    - { key: max_log_file_action, value: ROTATE }
+    - { key: admin_space_left_action, value: SUSPEND }
+  loop_control:
+    label: "{{ item.key }}"
+  notify: Restart auditd
+
+- name: Audit rules
+  ansible.builtin.template:
+    src: audit-hardening.rules.j2
+    dest: /etc/audit/rules.d/50-hardening.rules
+    owner: root
+    group: root
+    mode: "0640"
+  notify: Load audit rules
+
+- name: Enable auditd
+  ansible.builtin.service:
+    name: auditd
+    enabled: true
+    state: started
+  when: not common_container_mode

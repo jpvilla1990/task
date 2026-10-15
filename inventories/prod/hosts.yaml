@@ -1,0 +1,21 @@
+all:
+  children:
+    dev:
+      hosts:
+        machine1: &machine1
+          ansible_host: ip_1
+    staging:
+      hosts:
+        machine2: &machine2
+          ansible_host: ip_2
+    prod:
+      hosts:
+        machine3: &machine3
+          ansible_host: ip_3
+    brokers:
+      hosts:
+        machine1: *machine1
+    workers:
+      hosts:
+        machine1: *machine2
+        machine2: *machine3

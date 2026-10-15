@@ -1,0 +1,13 @@
+[project]
+name = "ansible-molecule-tests"
+version = "0.1.0"
+description = "Molecule tests for Ansible roles"
+requires-python = ">=3.11"
+dependencies = [
+    "ansible-core",
+    "molecule",
+    "molecule-plugins[docker]",
+]
+
+[tool.ansible]
+collections = ["community.general", "ansible.posix"]

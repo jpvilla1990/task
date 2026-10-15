@@ -1,0 +1,39 @@
+vault_host: vault.secure.com
+vault_engine: project1
+vault_ssh_secrets: ssh
+admin_users: [
+  "user1",
+  "user2",
+]
+common_ssh_allowed_cidrs:
+  - "203.0.113.05/32" # Ip ansible
+  - "203.0.113.10/32" # Ip user1
+  - "203.0.113.15/32" # Ip user2
+common_monitoring_cidrs:
+  - "10.0.0.0/8"
+common_node_exporter_port: 9100
+common_firewall_docker_user_chain: true
+common_firewall_extra_rules: []
+
+# Audit log rotation
+common_auditd_max_log_file: 10
+common_auditd_num_logs: 5
+
+# Skip auditd service management inside containers
+common_container_mode: false
+
+common_node_exporter_version: "1.9.1"
+
+common_docker_arch_map:
+  x86_64: amd64
+  aarch64: arm64
+
+common_node_exporter_checksums:
+  amd64: "REPLACE_WITH_VERIFIED_SHA256"
+  arm64: "REPLACE_WITH_VERIFIED_SHA256"
+
+common_auto_reboot: false
+common_auto_reboot_time: "03:00"
+
+common_node_exporter_listen: "0.0.0.0:9100"
+common_node_exporter_extra_args: []
