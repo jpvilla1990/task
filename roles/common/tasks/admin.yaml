@@ -15,7 +15,7 @@
 
 - name: Create admin users
   ansible.builtin.user:
-    name: "{{ item.username }}"
+    name: "{{ item.user }}"
     shell: /bin/bash
     create_home: true
     groups: "sudo"
@@ -25,16 +25,16 @@
 
 - name: Create .ssh directory for admin users
   ansible.builtin.file:
-    path: "/home/{{ item.username }}/.ssh"
+    path: "/home/{{ item.user }}/.ssh"
     state: directory
-    owner: "{{ item.username }}"
-    group: "{{ item.username }}"
+    owner: "{{ item.user }}"
+    group: "{{ item.user }}"
     mode: '0700'
   loop: "{{ admin_users }}"
 
 - name: Add SSH public keys for admin users
   ansible.posix.authorized_key:
-    user: "{{ item }}"
-    key: "{{ hostvars['localhost'][item ~ '_public_key'] }}" # Dynamic construct the key using the usernames
+    user: "{{ item.user }}"
+    key: "{{ item.public_key }}" # Dynamic construct the key using the usernames
     state: present
   loop: "{{ admin_users }}"

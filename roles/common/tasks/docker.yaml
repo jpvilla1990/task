@@ -3,9 +3,3 @@
     name: docker.io
     state: present
     update_cache: true
-
-- name: Ensure Docker is enabled and started
-  ansible.builtin.service:
-    name: docker
-    state: started
-    enabled: true

@@ -2,3 +2,14 @@
   ansible.builtin.service:
     name: ssh
     state: restarted
+
+- name: Restart auditd
+  ansible.builtin.service:
+    name: auditd
+    state: restarted
+  when: not common_container_mode
+
+- name: Load audit rules
+  ansible.builtin.command: augenrules --load
+  changed_when: true
+  when: not common_container_mode

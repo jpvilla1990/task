@@ -1,4 +1,10 @@
 ---
+- name: Install auditd
+  ansible.builtin.apt:
+    name: auditd
+    state: present
+    update_cache: true
+
 - name: Tune auditd.conf
   ansible.builtin.lineinfile:
     path: /etc/audit/auditd.conf

@@ -10,9 +10,15 @@ platforms:
     dockerfile: dockerfile
     pre_build_image: false
     command: sleep infinity
+    capabilities:
+      - NET_ADMIN
+      - NET_RAW
 
 provisioner:
   name: ansible
+  inventory:
+    links:
+      group_vars: ../../inventories/prod/group_vars/
 
 verifier:
   name: ansible

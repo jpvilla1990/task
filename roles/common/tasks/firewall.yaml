@@ -1,4 +1,11 @@
 # Set firewall defaults
+- name: Install UFW
+  ansible.builtin.apt:
+    name: ufw
+    state: present
+    update_cache: true
+  when: ansible_os_family == "Debian"
+
 - name: Default policy - deny incoming
   community.general.ufw:
     direction: incoming

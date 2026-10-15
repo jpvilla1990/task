@@ -1,12 +1,13 @@
 vault_host: vault.secure.com
 vault_engine: project1
 vault_ssh_secrets: ssh
-admin_users: [
-  "user1",
-  "user2",
-]
+admin_users:
+  - user: user1
+    public_key: "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIC7l670dPQoZFCxGbsh156d5LdsC1zzeUDJbCQs0pDIu molecule-test-user1"
+  - user: user2
+    public_key: "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIO76Fc9YHkjPbW/bURZ+E4rA8tbqPhGMjvPRLRYphtQC molecule-test-user2"
 common_ssh_allowed_cidrs:
-  - "203.0.113.05/32" # Ip ansible
+  - "203.0.113.5/32" # Ip ansible
   - "203.0.113.10/32" # Ip user1
   - "203.0.113.15/32" # Ip user2
 common_monitoring_cidrs:
