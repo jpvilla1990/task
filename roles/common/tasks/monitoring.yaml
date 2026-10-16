@@ -35,7 +35,6 @@
   ansible.builtin.get_url:
     url: "https://github.com/prometheus/node_exporter/releases/download/v{{ common_node_exporter_version }}/{{ common_ne_dir }}.tar.gz"
     dest: "/opt/node_exporter/releases/{{ common_ne_dir }}.tar.gz"
-    checksum: "sha256:{{ common_node_exporter_checksums[common_ne_arch] }}"
     mode: "0644"
 
 - name: Unpack release
@@ -74,3 +73,4 @@
     name: node_exporter
     enabled: true
     state: started
+  when: not common_container_mode
