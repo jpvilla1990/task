@@ -39,6 +39,23 @@ All tasks look at an desired state, for example:
 This task checks this line is defined in a specific way, if so the task is skipped.
 Running plain bash commands was avoided to ensure idempotency.
 
+See test results:
+```bash
+default ➜ destroy: Executed: Successful
+default ➜ syntax: Executed: Successful
+default ➜ create: Executed: Successful
+default ➜ prepare: Executed: Missing playbook (Remove from test_sequence to suppress)
+default ➜ converge: Executed: Successful
+default ➜ idempotence: Executed: Successful
+default ➜ side_effect: Executed: Missing playbook (Remove from test_sequence to suppress)
+default ➜ verify: Executed: Successful
+default ➜ cleanup: Executed: Missing playbook (Remove from test_sequence to suppress)
+default ➜ destroy: Executed: Successful
+
+SCENARIO RECAP                                                                 
+default                   : actions=12  successful=7  disabled=0  skipped=0  missing=6  failed=0
+```
+
 ## 4. Inventory Layout dev, staging, prod
 
 Inventory layout for each environment is defined in `inventories/prod/hosts.yaml`.
